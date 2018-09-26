@@ -12,7 +12,7 @@ irisDataSet = pd.read_csv('dataSet/Iris.csv', skipinitialspace=True, usecols=col
 
 print(irisDataSet)
 
-scatter_matrix(irisDataSet, alpha=0.2, diagonal='kde')
+scatter_matrix(irisDataSet, diagonal='kde', marker="*")
 
 plt.show()
 
