@@ -1,6 +1,7 @@
 import pandas as pd
 from pandas.plotting import scatter_matrix
 import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
 
 irisDataSetTotal =  pd.read_csv('dataSet/Iris.csv', sep="," )
 
@@ -15,4 +16,6 @@ scatter_matrix(irisDataSetTotal[colnames], color = colors,  diagonal='kde', mark
 
 plt.show()
 
-print( 'fin')
+x_train, x_test, y_train, y_test = train_test_split(irisDataSetTotal[colnames], irisDataSetTotal['Species'], test_size=0.3)
+print('***************************')
+print(x_train)
