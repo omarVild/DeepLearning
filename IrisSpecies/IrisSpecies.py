@@ -111,6 +111,8 @@ with tf.Session() as sess:
             
             sess.run(cost, feed_dict={inputs: x_train[i: i+1], targets: y_trainTMP })
             
+            
+            
             #if step % display_step == 0 or step == 1:
                 
               
