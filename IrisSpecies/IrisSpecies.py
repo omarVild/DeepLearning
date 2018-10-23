@@ -3,6 +3,7 @@ from pandas.plotting import scatter_matrix
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
+import numpy as np
 
 irisDataSetTotal =  pd.read_csv('dataSet/Iris.csv', sep="," )
 
@@ -15,12 +16,12 @@ one_hot = [[1,0,0],[0,1,0],[0,0,1]]
 color_wheel = ["#FF0000", "#00FF00", "#0000FF"]
 colors = irisDataSetTotal["Species"].map(lambda x: color_wheel[x-1])
 scatter_matrix(irisDataSetTotal[colnames], color = colors,  diagonal='kde', marker="*")
-label_targets = irisDataSetTotal["Species"].map(lambda x: one_hot[x-1])
-#print("************label_targets*************************")
-#print(label_targets)
+
+one_hot_targets = irisDataSetTotal["Species"].apply(lambda x: one_hot[x-1])
+one_hot_targets = np.matrix(one_hot_targets.tolist())
+
 #plt.show()
 
-x_train, x_test, y_train, y_test = train_test_split(irisDataSetTotal[colnames], label_targets, test_size=0.3)
 
 
 input_size = 4
@@ -49,54 +50,67 @@ outputs_2 = tf.nn.relu( nets_layer_2 )
 ################################LAYER_3#################################
 weights_layer_3 = tf.get_variable("weights_layer_3", [nets_size_layer_2, output_size])
 biases_net_3 = tf.get_variable("biases_3", [output_size])
-nets_layer_3 = tf.matmul(outputs_2, weights_layer_3) + biases_net_3
+outputs = tf.matmul(outputs_2, weights_layer_3) + biases_net_3
 
 
 
 ###############################ACYIVATION FUNCTION######################
-loss = tf.nn.softmax_cross_entropy_with_logits(logits=nets_layer_3, labels=targets)
+loss = tf.nn.softmax_cross_entropy_with_logits(logits=outputs, labels=targets)
 cross_entropy = tf.reduce_mean(loss)
 
 
 #############################OPTIMIZATION ALGORITHM#####################
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.5)
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
 cost= optimizer.minimize(cross_entropy)
 
 
+x_train, x_test, y_train, y_test = train_test_split(irisDataSetTotal[colnames].as_matrix(), one_hot_targets, test_size=0.3)
 
-x_train, x_test, y_train, y_test = train_test_split(irisDataSetTotal[colnames].as_matrix(), irisDataSetTotal['Species'], test_size=0.3)
+
+
+out_equals_target = tf.equal(tf.argmax(outputs, 1), tf.argmax(targets, 1))
+accuracy = tf.reduce_mean(tf.cast(out_equals_target, tf.float32))
 
 
 #print('*************X train**************')
 #print(x_train)
 
-epochs_nums = 10000
-step = 1
-display_step=100
 
 init = tf.global_variables_initializer()
+
+max_epochs = 100
 
 
 #Start training
 with tf.Session() as sess:
     sess.run(init)
-    for epoch in range(epochs_nums):
+    
+    for epoch_counter in range(max_epochs):
         for i in range(len(x_train)):
             print("*************train input:" , i ," *********************")
-            #print("train input shape:", x_train[i].shape)
-            print("train input values: ",  x_train[i])
-            print("expected crude value: " , y_train[i:i+1].values[0])
-            print("expected value: " , one_hot[y_train[i:i+1].values[0] -1])
-            y_trainTMP = [one_hot[y_train[i:i+1].values[0] -1]]
-            print("")
-            print("")
-            
-            
-            sess.run(cost, feed_dict={inputs: x_train[i:i+1], targets: y_trainTMP })
-            
-            
-            
-            #if step % display_step == 0 or step == 1:
-                
-              
+            print("x train input shape:", x_train[i].shape)
+            print("x train input values: ",  x_train[i])
+            print("y train input shape:", y_train[i].shape)
+            print("y train input values: ",  y_train[i])
+            sess.run(cost, feed_dict={inputs: x_train[i:i+1], targets: y_train[i:i+1] })
+        
+
+    print("y_test shape:", y_test.shape)
+    print("x_test shape:", x_test.shape)
+    
+    validation_accuracy = sess.run(accuracy,  feed_dict={inputs: x_test, targets: y_test})
+    print(' Validation accuracy: '+'{0:.2f}'.format(validation_accuracy * 100.)+'%')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
