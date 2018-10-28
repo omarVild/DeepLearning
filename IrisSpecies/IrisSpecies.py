@@ -20,7 +20,7 @@ scatter_matrix(irisDataSetTotal[colnames], color = colors,  diagonal='kde', mark
 one_hot_targets = irisDataSetTotal["Species"].apply(lambda x: one_hot[x-1])
 one_hot_targets = np.matrix(one_hot_targets.tolist())
 
-#plt.show()
+plt.show()
 
 
 
@@ -78,7 +78,7 @@ accuracy = tf.reduce_mean(tf.cast(out_equals_target, tf.float32))
 
 init = tf.global_variables_initializer()
 
-max_epochs = 100
+max_epochs = 200
 
 
 #Start training
@@ -90,8 +90,8 @@ with tf.Session() as sess:
             print("*************train input:" , i ," *********************")
             print("x train input shape:", x_train[i].shape)
             print("x train input values: ",  x_train[i])
-            print("y train input shape:", y_train[i].shape)
-            print("y train input values: ",  y_train[i])
+            print("y target output shape:", y_train[i].shape)
+            print("y target output values: ",  y_train[i])
             sess.run(cost, feed_dict={inputs: x_train[i:i+1], targets: y_train[i:i+1] })
         
 
