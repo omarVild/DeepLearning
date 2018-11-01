@@ -2,7 +2,7 @@ import tensorflow as tf
 import pandas as pd
 
 #this is a very basic example of a linear neuron, 
-#the idea is try to explain the most basic concept of a neural network
+#the idea is to try to explain the most basic concept of a neural network
 #https://en.wikipedia.org/wiki/Perceptron
 
 ##################prices##########################
@@ -40,7 +40,7 @@ total_price_st = tf.add(total_popcorn,total_nachos)
 total_price = tf.add(total_price_st,total_sodas)
 
 
-squared_total = tf.square(tf.abs(total_target-total_price)) 
+squared_total = tf.square(total_target-total_price) 
 loss = tf.reduce_sum(squared_total)
 
 optimizer = tf.train.GradientDescentOptimizer(0.0001)
