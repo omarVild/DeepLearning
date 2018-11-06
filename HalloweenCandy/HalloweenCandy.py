@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 
 #https://www.kaggle.com/fivethirtyeight/the-ultimate-halloween-candy-power-ranking/
 halloweenCandyDataSet =  pd.read_csv('HalloweenCandy.csv', sep =',')
-colnames = ['fruity','caramel','peanutyalmondy','nougat','crispedricewafer','hard','bar','pluribus','sugarpercent','pricepercent','winpercent']
+colnames = ['fruity','caramel','peanutyalmondy','nougat','crispedricewafer','hard','bar','sugarpercent','pricepercent','winpercent']
 targets = ['chocolate']
 
 x_train, x_test, y_train, y_test = train_test_split(halloweenCandyDataSet[colnames], halloweenCandyDataSet[targets], test_size=0.3)
@@ -19,6 +19,8 @@ accuracy= accuracy_score(y_test, predicted_values)
 print("accuracy:", accuracy)
 
 predicted_value = mlp.predict(x_test[0:1])
+
+
 print("predicted_value:", predicted_value)
 print("Real value: ", y_test[0:1].values.ravel())
 
