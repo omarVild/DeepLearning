@@ -21,8 +21,9 @@ accuracy= accuracy_score(y_test, predicted_values)
 print("accuracy:", accuracy)
 
 test_value =  random.randint(0, y_test['y'].count())
-predicted_value = mlp.predict(x_test.iloc[test_value:test_value+1])
+predicted_value = mlp.predict(x_test[test_value:test_value+1])
 
+print("TicTacToe values:\n", x_test[test_value:test_value+1])
 print("predicted_value:", predicted_value)
 print("Real value: ", y_test[test_value:test_value+1].values.ravel())
 
