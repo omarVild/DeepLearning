@@ -11,7 +11,7 @@ targets = ['chocolate']
 
 x_train, x_test, y_train, y_test = train_test_split(halloweenCandyDataSet[colnames], halloweenCandyDataSet[targets], test_size=0.3)
 
-mlp = MLPClassifier(max_iter=2000, learning_rate_init=0.001, solver='sgd')
+mlp = MLPClassifier(hidden_layer_sizes=(100,100,50),  max_iter=4000, activation= 'relu', learning_rate_init=0.001)
 mlp.fit(x_train, y_train.values.ravel())
 
 predicted_values = mlp.predict(x_test)
